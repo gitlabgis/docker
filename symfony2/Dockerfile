@@ -34,6 +34,7 @@ RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/my.cnf
 
 VOLUME /var/lib/mysql
 COPY docker-entrypoint.sh /entrypoint.sh
+RUN chmod u+x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 3306
