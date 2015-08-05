@@ -1,2 +1,2 @@
 Expose port is 80
-Add Volume
+Add Volume /var/www
