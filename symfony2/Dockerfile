@@ -14,6 +14,30 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 libapache2-mod-php
 RUN curl --silent --location https://deb.nodesource.com/setup_0.12 | bash -;DEBIAN_FRONTEND=noninteractive apt-get install --yes nodejs;
 RUN a2enmod php5;a2enmod rewrite;npm install -g bower;npm install -g uglify-js;npm install -g uglifycss;gem install capifony
 
+# Add MySQL
+RUN groupadd -r mysql && useradd -r -g mysql mysql
+RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys A4A9406876FCBD3C456770C88C718D3B5072E1F5
+ENV MYSQL_MAJOR 5.7
+ENV MYSQL_VERSION 5.7.8-rc
+RUN echo "deb http://repo.mysql.com/apt/debian/ wheezy mysql-${MYSQL_MAJOR}-dmr" > /etc/apt/sources.list.d/mysql.list
+RUN { \
+		echo mysql-community-server mysql-community-server/data-dir select ''; \
+		echo mysql-community-server mysql-community-server/root-pass password ''; \
+		echo mysql-community-server mysql-community-server/re-root-pass password ''; \
+		echo mysql-community-server mysql-community-server/remove-test-db select false; \
+	} | debconf-set-selections \
+	&& apt-get update && apt-get install -y mysql-server="${MYSQL_VERSION}"* && rm -rf /var/lib/apt/lists/* \
+	&& rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql
+
+# comment out a few problematic configuration values
+RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/my.cnf
+
+VOLUME /var/lib/mysql
+COPY docker-entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+EXPOSE 3306
+
 COPY scripts/run.sh /run.sh
 RUN chmod +x /run.sh
 
