@@ -8,7 +8,7 @@ ENV SHELL /bin/bash
 RUN echo "deb http://packages.dotdeb.org wheezy-php56 all" >> /etc/apt/sources.list.d/dotdeb.list;echo "deb-src http://packages.dotdeb.org wheezy-php56 all" >> /etc/apt/sources.list.d/dotdeb.list;wget http://www.dotdeb.org/dotdeb.gpg;apt-key add dotdeb.gpg;apt-get update;apt-get -y upgrade
 
 # Install apache, PHP, and supplimentary programs. curl and lynx-cur are for debugging the container.
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 libapache2-mod-php5 php5-mysql php5-gd php-pear php-apc php5-curl curl php5-adodb php-gettext git acl php5-mcrypt php5-curl jpegoptim php5-gd php5-memcached php5-intl ruby-full build-essential
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 libapache2-mod-php5 php5-mysql php5-gd php-pear php-apc php5-curl curl php5-adodb php-gettext git acl php5-mcrypt php5-curl jpegoptim php5-gd php5-intl ruby-full build-essential
 
 # Enable apache mods and uglify*
 RUN curl --silent --location https://deb.nodesource.com/setup_0.12 | bash -;DEBIAN_FRONTEND=noninteractive apt-get install --yes nodejs;
@@ -36,12 +36,13 @@ COPY docker-entrypoint.sh /entrypoint.sh
 RUN chmod u+x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-EXPOSE 3306
+
 VOLUME ["/var/www", "/var/log/apache2", "/etc/apache2", "/var/lib/mysql", "/tmp"]
 
 COPY scripts/run.sh /run.sh
 RUN chmod +x /run.sh
 
+EXPOSE 3306
 EXPOSE 80
 
 CMD ["/run.sh"]
