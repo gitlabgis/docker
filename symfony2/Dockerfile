@@ -32,12 +32,12 @@ RUN { \
 # comment out a few problematic configuration values
 RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/my.cnf
 
-VOLUME /var/lib/mysql
 COPY docker-entrypoint.sh /entrypoint.sh
 RUN chmod u+x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 3306
+VOLUME ["/var/www", "/var/log/apache2", "/etc/apache2", "/var/lib/mysql", "/tmp"]
 
 COPY scripts/run.sh /run.sh
 RUN chmod +x /run.sh
