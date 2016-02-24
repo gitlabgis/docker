@@ -23,6 +23,6 @@ RUN chmod +x /run.sh
 
 EXPOSE 80
 
-CMD ["apache2","start"]
+CMD ["apache2ctl","start"]
 CMD ["/run.sh"]
-CMD ["apache2","-DFOREGROUND"]
+CMD ["apache2ctl","-DFOREGROUND"]
