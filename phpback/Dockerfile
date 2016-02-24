@@ -23,4 +23,5 @@ RUN chmod +x /run.sh
 
 EXPOSE 80
 
+CMD ["apache2","-DFOREGROUND"]
 CMD ["/run.sh"]
