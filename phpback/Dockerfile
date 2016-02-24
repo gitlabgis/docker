@@ -23,6 +23,8 @@ RUN chmod +x /run.sh
 
 EXPOSE 80
 
+COPY scripts/default /etc/apache2/sites-available/default
+
 CMD ["apache2ctl","start"]
 CMD ["/run.sh"]
 CMD ["apache2ctl","-DFOREGROUND"]
